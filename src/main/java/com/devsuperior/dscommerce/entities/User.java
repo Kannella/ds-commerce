@@ -14,7 +14,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Pq esse ID vai ser autoincrement no banco H2
     private Long id;
     private String name;
+
+    //O email do usuario eu nao quero que repita, por isso, eu posso confiigurar outro campo que nao seja
+    //a chave primaria, como um campo unico que nao se repete. Eu configuro isso com a anotation abaixo
+    @Column(unique = true)
     private String email;
+
     private String phone;
     private LocalDate birthDate;
     private String password;
