@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import org.aspectj.weaver.ast.Or;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")
@@ -24,6 +27,10 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
+
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
+
 
     public Order() {
 
@@ -68,9 +75,43 @@ public class Order {
     public void setClient(User client) {
         this.client = client;
     }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+    public List<Product> getProducts() {
+        return items.stream().map(x -> x.getProduct()).toList();
+    }
+
+    /*
+    1. items.stream()
+    Converte a lista items (do tipo List<OrderItem>) em um Stream.
+
+    Um Stream permite aplicar operações funcionais como map, filter, collect, etc.
+
+    2. .map(x -> x.getProduct())
+    pega cada elemetento da stream e transforma eles aplicando
+    a função getProduct() em cada elemento (x) da lista items.
+
+    Ou seja, para cada OrderItem, ele extrai o produto associado.
+
+    Resultado: um Stream<Product>
+
+    3. .toList()
+    Converte o Stream<Product> de volta para uma List<Product>
+    */
 }
 
 /*
+
+
+Pensa numa lista como uma caixa com coisas.
+Agora pensa numa Stream como uma esteira que pega essa caixa e vai passando item por item, permitindo que você:
+    Transforme (map) -> a funcao map transforma cada elemento
+    Filtre (filter)
+    Some (reduce)
+    Colete em outra coisa (collect)
+
 @OneToOne: Define o relacionamento 1:1 com Payment.
 
 Um Order pode ter um Payment.

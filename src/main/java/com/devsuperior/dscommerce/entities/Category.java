@@ -14,10 +14,6 @@ public class Category {
     private Long id;
     private String name;
 
-    //relacionamento muito para muitos. O mappedBy quer dizer que,
-    // como do outro lado (classe Product) ja foi mapeado o categories (private Set<Category>
-    // categories = new HashSet<>();) entao na classe Category eu vou colocar o @ManyToMany(mappedBy = "categories") que mapeia o outro lado
-    // pelo nome do atributo do set (categories)
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 

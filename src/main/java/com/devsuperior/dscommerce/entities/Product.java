@@ -3,6 +3,7 @@ package com.devsuperior.dscommerce.entities;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,6 +29,9 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"), //vai juntar o product_id na nova tabela. Eh o product_id pq eh na classe que voce esta
             inverseJoinColumns = @JoinColumn(name = "category_id")) //vai juntar o category_id na nova tabela tambem
     private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Product() {
 
@@ -84,6 +88,14 @@ public class Product {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public List<Order> getOrders() {
+        return items.stream().map(x -> x.getOrder()).toList();
+    }
 }
 
 /*
@@ -112,7 +124,7 @@ Na tabela produto_categoria:
     1	        1
     1	        1
 
-    Ou seja, a combinação de produto_id e categoria_id não pode se repetir.
+    Ou seja, a combinação de produto_id e categoria_id não pode se repetir. O produto nao pode aparecer duas vezes
 
 
 Pq usar set e nao list
