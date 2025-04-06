@@ -6,6 +6,7 @@ import org.aspectj.weaver.ast.Or;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -81,6 +82,17 @@ public class Order {
     }
     public List<Product> getProducts() {
         return items.stream().map(x -> x.getProduct()).toList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Order order)) return false;
+        return Id == order.Id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Id);
     }
 
     /*
