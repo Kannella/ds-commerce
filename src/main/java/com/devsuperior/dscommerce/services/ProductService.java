@@ -57,4 +57,30 @@ public class ProductService {
         //Reconverto a entidade que eu acabei de salvar no banco para ProductDTO para passar para o Controller
         return new ProductDTO(entity);
     };
+
+    //Configurando uma requisicao POST na rota /products esprando o corpo JSON enviado do Front-end
+    @Transactional // nao eh somente leitura agora
+    public ProductDTO update(Long id, ProductDTO dto) {
+        //Instanciando um produto pelo id passado na url
+        Product entity = repository.getReferenceById(id); //Essa operacao getReferenceById nao vai no banco de dados, ele so prepara um objeto monitorado pela JPA.
+
+        //Copiei os dados desse produto para o meu dto
+        copyDtoToEntity(dto, entity);
+
+        //Salvar uma entidade no banco de dados usando o Repository (dependencia dessa classe)
+        //Salvo essa entidade (que eu criei acima com o new) no banco e armazeno essa referencia para essa entidade nova e salvo nessa mesma variavel
+        entity = repository.save(entity);
+
+        //Reconverto a entidade que eu acabei de salvar no banco para ProductDTO para passar para o Controller
+        return new ProductDTO(entity);
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+    }
+
+    ;
 }

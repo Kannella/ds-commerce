@@ -96,5 +96,13 @@ public class ProductController {
         return ResponseEntity.created(uri).body(dto); // Retorna o resultado da funcao insert do ProductService (que colocou o dto que veio como parametro, como argumento para o metodo insert do ProductService) e alem disso estou customizando minha resposta para responder 201 (que signif recusro criado) onde o corpo vai ser o objeto armazenado na variavel dto ( .body(dto) ). E alem disso assim, na resposta alem de responder o codigo 201 no cabecalho vai ter o link para o recurso criado
     }
 
+//-----------------------------------------------------------------------------------------------------------
+
+    @PutMapping(value = "/{id}") //Resposta de um Get nessa rota products
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+        dto = service.update(id, dto); //armazeno a referencia atualizada do dto depois de chamar o update no ProductService
+        return ResponseEntity.ok(dto); //Estou customizando minha resposta para responder 200 onde o corpo vai ser o objeto armazenado na variavel dto
+    };
+
 
 }
