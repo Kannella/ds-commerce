@@ -98,10 +98,18 @@ public class ProductController {
 
 //-----------------------------------------------------------------------------------------------------------
 
-    @PutMapping(value = "/{id}") //Resposta de um Get nessa rota products
+    @PutMapping(value = "/{id}") //Resposta de um Put nessa rota products
     public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
         dto = service.update(id, dto); //armazeno a referencia atualizada do dto depois de chamar o update no ProductService
         return ResponseEntity.ok(dto); //Estou customizando minha resposta para responder 200 onde o corpo vai ser o objeto armazenado na variavel dto
+    };
+
+//-----------------------------------------------------------------------------------------------------------
+
+    @DeleteMapping(value = "/{id}") //Resposta de um Get nessa rota products
+    public ResponseEntity<Void> update(@PathVariable Long id) { // Resposta com o corpo vazio (ResponseEntity<void>)
+        service.delete(id);
+        return ResponseEntity.noContent().build(); // O codigo 204 eh que deu certo e nao tem corpo na resposta. Eh isso que o metodo noContent().build(); do ResponseEntity faz
     };
 
 

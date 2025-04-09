@@ -82,5 +82,8 @@ public class ProductService {
         entity.setImgUrl(dto.getImgUrl());
     }
 
-    ;
+    @Transactional() // nao eh somente uma leitura no banco
+    public void delete(Long id) {
+        repository.deleteById(id);
+    };
 }
