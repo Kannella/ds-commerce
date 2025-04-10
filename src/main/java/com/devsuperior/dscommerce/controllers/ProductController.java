@@ -8,6 +8,7 @@ import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,10 +88,10 @@ public class ProductController {
     //}
 
 //-----------------------------------------------------------------------------------------------------------
-
+    //O @Valid vai sempre que receber um dto no corpo da requisicao de post ele passa por aquela verificacao no ProductDTO
     //Configurando uma requisicao POST na rota /products esprando o corpo JSON enviado do Front-end que eh recebido por meio do argumento do metodo que eh configurado como @RequestBody ProductDTO dto e com essa configuracao o corpo da requisicao vai entrar neste parametro e vai instanciar um DTO correspondente com as informacoes do JSON recebidas
     @PostMapping //Agora minha requisicaon eh um Post
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
         dto = service.insert(dto); //Vai atribuir a variavel dto do tipo Objeto (ProductDTO) o retorno da funcao insert do ProductService (que colocou o dto que veio como parametro, como argumento para o metodo insert do ProductService)
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri(); //preciso passar um objeto desse para o metodo created abaixo
         return ResponseEntity.created(uri).body(dto); // Retorna o resultado da funcao insert do ProductService (que colocou o dto que veio como parametro, como argumento para o metodo insert do ProductService) e alem disso estou customizando minha resposta para responder 201 (que signif recusro criado) onde o corpo vai ser o objeto armazenado na variavel dto ( .body(dto) ). E alem disso assim, na resposta alem de responder o codigo 201 no cabecalho vai ter o link para o recurso criado
@@ -99,7 +100,7 @@ public class ProductController {
 //-----------------------------------------------------------------------------------------------------------
 
     @PutMapping(value = "/{id}") //Resposta de um Put nessa rota products
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
         dto = service.update(id, dto); //armazeno a referencia atualizada do dto depois de chamar o update no ProductService
         return ResponseEntity.ok(dto); //Estou customizando minha resposta para responder 200 onde o corpo vai ser o objeto armazenado na variavel dto
     };
